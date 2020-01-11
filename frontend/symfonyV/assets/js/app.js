@@ -8,8 +8,9 @@
 // any CSS you import will output into a single css file (app.css in this case)
 
 import Vue from 'vue';
-import App from './components/App.vue';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import App from './components/App.vue';
+
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)
