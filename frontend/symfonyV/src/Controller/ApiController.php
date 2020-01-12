@@ -14,9 +14,13 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ApiController extends AbstractController
 {
-    public function __construct(\GuzzleHttp\ClientInterface $client)
+    public $session;
+    public $client;
+
+    public function __construct(\GuzzleHttp\ClientInterface $client, SessionInterface $session)
     {
         $this->client = $client;
+        $this->session = $session;
     }
 
     /**
@@ -24,8 +28,7 @@ class ApiController extends AbstractController
      */
     public function apiAuthenticate(Request $request)
     {
-        $data = $request->getContent();
-        $data = json_decode($data, true);
+        $data = json_decode($request->getContent(), true);
         if ($data['user']) {
             $username = $data['user']['username'];
             $password = $data['user']['password'];
@@ -50,5 +53,22 @@ class ApiController extends AbstractController
         } else {
             return new Response(json_encode("{'error': 'no credentials provided'}"), 500);
         }
+    }
+
+    /**
+     * @Route("/{endpoint}/", name="endpoint")
+     */
+    public function getProducts(Request $request,$endpoint)
+    {
+            $options = [
+                'headers' => [
+                    "Authorization" => "token ".$this->session->get('credentials'),
+                ]
+            ];
+            $response = $this->client->get("/".$endpoint."/", $options);
+            $resp = json_decode($response->getBody());
+            return new Response(json_encode($resp), $response->getStatusCode());
+
+        
     }
 }
