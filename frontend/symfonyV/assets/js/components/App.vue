@@ -92,32 +92,16 @@
       <b-container class="bv-example-row">
         <b-row>
           <b-col v-if="suppliers">
-            <ul id="suppliers_list">
-              <li v-for="sc in suppliers_content">
-                {{ sc.ContactName }}
-              </li>
-            </ul>
+            <b-table striped hover :items="suppliers_content"></b-table>
           </b-col>
           <b-col v-if="products">
-            <ul id="products_list">
-              <li v-for="sc in products_content">
-                {{ sc.ProductName }}
-              </li>
-            </ul>
+            <b-table striped hover :items="products_content"></b-table>
           </b-col>
           <b-col v-if="orders">
-            <ul id="orders_list">
-              <li v-for="sc in orders_content">
-                {{ sc.ProductID }}
-              </li>
-            </ul>
+            <b-table striped hover :items="orders_content"></b-table>
           </b-col>
           <b-col v-if="categories">
-            <ul id="categories_list">
-              <li v-for="sc in categories_content">
-                {{ sc.CategoryName }}
-              </li>
-            </ul>
+            <b-table striped hover :items="categories_content"></b-table>
           </b-col>
         </b-row>
       </b-container>
@@ -137,13 +121,13 @@ export default {
       password: "",
       login: false,
       suppliers:false,
-      suppliers_content:{},
+      suppliers_content:[],
       products: false,
-      products_content:{},
+      products_content:[],
       orders: false,
-      orders_content:{},
+      orders_content:[],
       categories: false,
-      categories_content:{},
+      categories_content:[],
     };
   },
   methods: {
@@ -174,7 +158,7 @@ export default {
         url: url,
       })
         .then((data)=>{
-          this.products_content = data
+          this.products_content = data.data
         })
         .catch(err => console.log(err));
     },
@@ -186,7 +170,7 @@ export default {
         url: url,
       })
         .then((data)=>{
-          this.orders_content = data
+          this.orders_content = data.data
         })
         .catch(err => console.log(err));
     },
@@ -198,7 +182,10 @@ export default {
         url: url,
       })
         .then((data)=>{
-          this.suppliers_content = data.data
+          
+          data.data.forEach(el => {
+            this.suppliers_content.push({ CompanyName: e.CompanyName, ContactName: e.ContactName, ContactTitle: e.ContactTitle })
+          });
         })
         .catch(err => console.log(err));
     },
@@ -209,7 +196,7 @@ export default {
         url: url,
       })
         .then((data)=>{
-          this.categories_content = data
+          this.categories_content = data.data
         })
         .catch(err => console.log(err));
     }
