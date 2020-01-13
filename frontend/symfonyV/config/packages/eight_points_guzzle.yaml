@@ -5,7 +5,7 @@ eight_points_guzzle:
     clients:
         api_gateway:
             # Write here the host where to do requests
-            base_url: "http://localhost:8000"
+            base_url: "%env(resolve:API_ENDPOINT)%"
 
             # Request options: http://docs.guzzlephp.org/en/stable/request-options.html
             options:
