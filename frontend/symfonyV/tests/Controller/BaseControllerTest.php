@@ -22,27 +22,17 @@ abstract class BaseControllerTest extends WebTestCase
         if ('test' !== $kernel->getEnvironment()) {
             throw new \LogicException('Primer must be executed in the test environment');
         }
-
-        // Get the entity manager from the service container
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $schemaTool = new SchemaTool($entityManager);
-
-        // Run the schema update tool using our entity metadata
-        $metadatas = $entityManager->getMetadataFactory()->getAllMetadata();
-        $out = $schemaTool->updateSchema($metadatas);
-
-        // If you are using the Doctrine Fixtures Bundle you could load these here
     }
 
     public function setUp()
     {
-        $this->http_client = new Client(['base_uri' => getenv("API_ENDPOINT")]);
+        $this->http_client = new Client(['base_uri' => 'http://localhost:8000']);
         $this->client = static::createClient();
         $this->session = $this->client->getContainer()->get('session');
         $auth_options = [
-            'form_params' => [
-                "username"  => getenv('UI_API_USER'),
-                "password"  => getenv('UI_API_PASSWORD'),
+            'json' => [
+                "username"  => 'artgraven',
+                "password"  => 'Occultyoga123*',
             ]];
         $response = $this->http_client->post("/auth/", $auth_options);
         $token = json_decode($response->getBody())->token;
@@ -53,9 +43,10 @@ abstract class BaseControllerTest extends WebTestCase
             ]
         ];
         $this->session->set('credentials', $token);
-        self::bootKernel();
+        //self::bootKernel();
+        //$this->client->getCookieJar()->set(new Cookie($this->session->getName(), $this->session->getId()));
         //run database migration
-        self::prime(self::$kernel);
+       // self::prime(self::$kernel);
     }
     
 }

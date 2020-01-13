@@ -6,27 +6,33 @@ use App\Tests\Controller\BaseControllerTest;
 
 class ApiControllerTest extends BaseControllerTest
 {
+    public function testlanding()
+    {
+        $this->client->request("GET", "/");
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+
     public function testSuppliers()
     {
-        $this->client->request("GET", "/api/suppliers/");
+        $this->client->get("/api/suppliers/");
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     public function testProducts()
     {
-        $this->client->request("GET", "/api/products/");
+        $this->client->get("/api/products/");
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     public function testOrders()
     {
-        $this->client->request("GET", "/api/orders/");
+        $this->client->get("/api/order_details/");
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     public function testCategories()
     {
-        $this->client->request("GET", "/api/categories/");
+        $this->client->get("/api/categories/");
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 }
